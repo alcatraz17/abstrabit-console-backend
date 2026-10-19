@@ -1,0 +1,9 @@
+name = "abstrabit-console-sweeper"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[triggers]
+crons = ["* * * * *"]
+
+[vars]
+SWEEP_URL = "https://abstrabit-console-backend.vercel.app/api/cron/sweep"

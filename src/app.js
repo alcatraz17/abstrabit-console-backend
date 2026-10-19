@@ -6,6 +6,7 @@ import { sameOrigin } from './middleware/sameOrigin.js';
 import { sessionMiddleware } from './middleware/session.js';
 import { healthRouter } from './modules/health/health.routes.js';
 import { interactionsRouter } from './modules/interactions/interactions.routes.js';
+import { cronRouter } from './modules/jobs/jobs.routes.js';
 import { apiRouter } from './routes/index.js';
 import { logger } from './utils/logger.js';
 
@@ -26,6 +27,7 @@ app.use(
 );
 
 app.use('/api/discord/interactions', interactionsRouter);
+app.use('/api/cron', cronRouter);
 app.use('/api/health', healthRouter);
 
 app.use('/api', express.json({ limit: '100kb' }));

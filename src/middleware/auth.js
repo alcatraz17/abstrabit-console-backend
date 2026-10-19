@@ -1,8 +1,11 @@
 import { eq } from 'drizzle-orm';
 import { UnauthorizedError } from '../common/errors.js';
-import { TIMING } from '../config/constants.js';
+import { recordEvent } from '../common/events.js';
+import { EVENT_TYPE, TIMING } from '../config/constants.js';
+import { env } from '../config/env.js';
 import { db } from '../db/index.js';
 import { admins } from '../db/schema.js';
+import { safeEqual } from '../utils/crypto.js';
 
 function destroySession(req) {
   return new Promise((resolve) => req.session.destroy(() => resolve()));
@@ -33,4 +36,16 @@ export async function requireAdmin(req, _res, next) {
   }
   req.admin = admin;
   return next();
+}
+
+export async function requireCronSecret(req, _res, next) {
+  const header = req.get('authorization') ?? '';
+  const token = header.startsWith('Bearer ') ? header.slice('Bearer '.length) : '';
+  if (token && safeEqual(token, env.CRON_SECRET)) return next();
+  await recordEvent({
+    type: EVENT_TYPE.CRON_UNAUTHORIZED,
+    level: 'warn',
+    data: { ip: req.ip, path: req.path },
+  });
+  return next(new UnauthorizedError('A valid cron secret is required.'));
 }

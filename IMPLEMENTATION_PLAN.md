@@ -64,7 +64,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 - [x] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
 - [x] Inline runner and handlers for reply, channel card, mirror, AI enrichment, card updates and failure notices
 - [x] Reconciliation of channel cards and Discord mirrors after an unknown outcome
-- [ ] Cron sweep endpoint with housekeeping, and the Cloudflare Worker that calls it every minute
+- [x] Cron sweep endpoint with housekeeping, and the Cloudflare Worker that calls it every minute
 
 ### 6. Admin API
 
