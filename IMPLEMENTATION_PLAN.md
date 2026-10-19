@@ -49,8 +49,8 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 4. Interactions endpoint
 
-- [ ] Ed25519 verification on the raw body, the timestamp window and `PING`
-- [ ] `junk-requests.sh` for checking forged and malformed requests against a deployment
+- [x] Ed25519 verification on the raw body, the timestamp window and `PING`
+- [x] `junk-requests.sh` for checking forged and malformed requests against a deployment
 - [ ] Recording with dedup on the interaction id and a stored configuration snapshot
 - [ ] Initial responses: deferred, modal, inline and deferred update
 - [ ] Report buttons for acknowledge, escalate and resolve, with permission checks
