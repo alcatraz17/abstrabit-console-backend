@@ -51,10 +51,10 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 - [x] Ed25519 verification on the raw body, the timestamp window and `PING`
 - [x] `junk-requests.sh` for checking forged and malformed requests against a deployment
-- [ ] Recording with dedup on the interaction id and a stored configuration snapshot
-- [ ] Initial responses: deferred, modal, inline and deferred update
-- [ ] Report buttons for acknowledge, escalate and resolve, with permission checks
-- [ ] `/connect` with one-time codes and per-server command registration
+- [x] Recording with dedup on the interaction id and a stored configuration snapshot
+- [x] Initial responses: deferred, modal, inline and deferred update
+- [x] Report buttons for acknowledge, escalate and resolve, with permission checks
+- [x] `/connect` with one-time codes and per-server command registration
 
 ### 5. Delivery pipeline
 
@@ -62,8 +62,8 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 - [x] Mirror adapters for Discord channel webhooks and Slack incoming webhooks
 - [x] Job table with leases, claiming through `FOR UPDATE SKIP LOCKED` and lease-token fencing
 - [x] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
-- [ ] Inline runner and handlers for reply, channel card, mirror, AI enrichment, card updates and failure notices
-- [ ] Reconciliation of channel cards and Discord mirrors after an unknown outcome
+- [x] Inline runner and handlers for reply, channel card, mirror, AI enrichment, card updates and failure notices
+- [x] Reconciliation of channel cards and Discord mirrors after an unknown outcome
 - [ ] Cron sweep endpoint with housekeeping, and the Cloudflare Worker that calls it every minute
 
 ### 6. Admin API
