@@ -58,7 +58,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 5. Delivery pipeline
 
-- [ ] AI summary, tags and severity suggestion through Groq with a 5-second timeout
+- [x] AI summary, tags and severity suggestion through Groq with a 5-second timeout
 - [ ] Mirror adapters for Discord channel webhooks and Slack incoming webhooks
 - [ ] Job table with leases, claiming through `FOR UPDATE SKIP LOCKED` and lease-token fencing
 - [ ] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
