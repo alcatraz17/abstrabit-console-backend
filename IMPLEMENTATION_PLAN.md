@@ -70,7 +70,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 - [x] Servers: list, channels, report channel and mirror settings, test message, command sync, disconnect and demo toggles
 - [x] Bot invite details and one-time connect codes
-- [ ] Command configuration with versioned saves and a rule tester for unsaved drafts
+- [x] Command configuration with versioned saves and a rule tester for unsaved drafts
 - [ ] Overview figures, live feed with a change cursor, interaction timeline and security events
 - [ ] Retrying and failed jobs with single and bulk retry
 
@@ -79,7 +79,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 - [x] Unit tests for utilities, environment, rule engine, permissions, webhooks, retry policy and HTTP helpers
 - [x] Integration tests for authentication
 - [x] Integration tests for the interactions endpoint, the report pipeline and the connect flow
-- [ ] Integration tests for retries, leases, reconciliation, deadlines, scrubbing and the cron endpoint
+- [x] Integration tests for retries, leases, reconciliation, deadlines, scrubbing and the cron endpoint
 - [ ] Integration tests for the admin API
 
 ### 8. Documentation
