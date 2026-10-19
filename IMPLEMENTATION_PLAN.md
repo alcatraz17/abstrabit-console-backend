@@ -85,8 +85,8 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 ### 8. Documentation
 
 - [x] `CLAUDE.md` with the code style and invariants
-- [ ] README with architecture, local setup, environment variables, deployment and the quality bar
-- [ ] `AI_NOTES.md`
+- [x] README with architecture, local setup, environment variables, deployment and the quality bar
+- [x] `AI_NOTES.md`
 
 ### 9. Deployment
 
