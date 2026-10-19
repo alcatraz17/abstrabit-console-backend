@@ -1,0 +1,50 @@
+{
+  "name": "abstrabit-console-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Discord slash-command bot backend: verified interactions endpoint, durable delivery pipeline and admin API.",
+  "type": "module",
+  "main": "src/app.js",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "lint": "eslint . && node scripts/check-no-comments.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:db": "docker compose up -d --wait",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --env-file-if-exists=.env scripts/migrate.js",
+    "seed:admin": "node --env-file-if-exists=.env scripts/seed-admin.js",
+    "register:commands": "node --env-file-if-exists=.env scripts/register-commands.js"
+  },
+  "dependencies": {
+    "@vercel/functions": "3.10.1",
+    "bcryptjs": "3.0.3",
+    "connect-pg-simple": "10.0.0",
+    "discord-interactions": "4.4.0",
+    "drizzle-orm": "0.45.4",
+    "express": "5.3.0",
+    "express-session": "1.19.0",
+    "helmet": "8.3.0",
+    "pg": "8.23.1",
+    "pino": "10.4.0",
+    "pino-http": "11.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "acorn": "8.19.0",
+    "drizzle-kit": "0.31.11",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-promise": "7.3.0",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "supertest": "7.3.1",
+    "vitest": "4.1.12"
+  }
+}
