@@ -26,9 +26,9 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 1. Foundation
 
-- [ ] Project setup: ESLint, Prettier, Vitest, comment check and the CI workflow
+- [x] Project setup: ESLint, Prettier, Vitest, comment check and the CI workflow
 - [x] Validated environment, domain constants, logger with secret scrubbing and AES-256-GCM helpers
-- [ ] Drizzle schema and initial migration: admins, sessions, servers, command configuration, interactions, reports, jobs, job attempts and events
+- [x] Drizzle schema and initial migration: admins, sessions, servers, command configuration, interactions, reports, jobs, job attempts and events
 - [ ] Express app with helmet, request logging, body limits, session store, origin check and JSON errors
 - [ ] Health endpoint with database status, due jobs and the last sweep
 
