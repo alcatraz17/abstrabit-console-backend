@@ -1,10 +1,10 @@
-import { eq } from 'drizzle-orm';
-import { UnauthorizedError } from '../common/errors.js';
+import { and, eq } from 'drizzle-orm';
+import { NotFoundError, UnauthorizedError } from '../common/errors.js';
 import { recordEvent } from '../common/events.js';
 import { EVENT_TYPE, TIMING } from '../config/constants.js';
 import { env } from '../config/env.js';
 import { db } from '../db/index.js';
-import { admins } from '../db/schema.js';
+import { adminGuilds, admins, guilds } from '../db/schema.js';
 import { safeEqual } from '../utils/crypto.js';
 
 function destroySession(req) {
@@ -35,6 +35,19 @@ export async function requireAdmin(req, _res, next) {
     return next(new UnauthorizedError());
   }
   req.admin = admin;
+  return next();
+}
+
+export async function requireGuildAccess(req, _res, next) {
+  const guildId = req.params.guildId;
+  const [row] = await db
+    .select({ guild: guilds })
+    .from(adminGuilds)
+    .innerJoin(guilds, eq(guilds.id, adminGuilds.guildId))
+    .where(and(eq(adminGuilds.adminId, req.admin.id), eq(adminGuilds.guildId, guildId)))
+    .limit(1);
+  if (!row) return next(new NotFoundError('That server is not linked to your account.'));
+  req.guild = row.guild;
   return next();
 }
 
