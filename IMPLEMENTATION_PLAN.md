@@ -41,8 +41,8 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 3. Commands and Discord
 
-- [ ] Rule engine: ordered keyword rules, severity filters, mirror policy and per-user cooldown
-- [ ] Default configuration for `/report` and `/status` on every connected server
+- [x] Rule engine: ordered keyword rules, severity filters, mirror policy and per-user cooldown
+- [x] Default configuration for `/report` and `/status` on every connected server
 - [ ] Discord REST client with timeouts, route-template errors and permanent error codes
 - [ ] Command definitions for `/report`, `/status` and `/connect`, and the `register:commands` script
 - [ ] Message, card and modal builders with mentions disabled and Discord length limits applied
