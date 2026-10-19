@@ -34,10 +34,10 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 2. Admin authentication
 
-- [ ] Login, logout and `/me` with server-side sessions in an HttpOnly cookie
-- [ ] 30-minute idle timeout, 8-hour absolute limit and a new session id on every sign-in
-- [ ] Sign-in rate limits per email and per IP, with failed attempts recorded as security events
-- [ ] `seed:admin` script for creating and resetting console accounts
+- [x] Login, logout and `/me` with server-side sessions in an HttpOnly cookie
+- [x] 30-minute idle timeout, 8-hour absolute limit and a new session id on every sign-in
+- [x] Sign-in rate limits per email and per IP, with failed attempts recorded as security events
+- [x] `seed:admin` script for creating and resetting console accounts
 
 ### 3. Commands and Discord
 
@@ -77,7 +77,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 ### 7. Tests
 
 - [ ] Unit tests for utilities, environment, rule engine, permissions, webhooks, retry policy and HTTP helpers
-- [ ] Integration tests for authentication
+- [x] Integration tests for authentication
 - [ ] Integration tests for the interactions endpoint, the report pipeline and the connect flow
 - [ ] Integration tests for retries, leases, reconciliation, deadlines, scrubbing and the cron endpoint
 - [ ] Integration tests for the admin API

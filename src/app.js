@@ -5,6 +5,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { sameOrigin } from './middleware/sameOrigin.js';
 import { sessionMiddleware } from './middleware/session.js';
 import { healthRouter } from './modules/health/health.routes.js';
+import { apiRouter } from './routes/index.js';
 import { logger } from './utils/logger.js';
 
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/health', healthRouter);
 app.use('/api', express.json({ limit: '100kb' }));
 app.use('/api', sessionMiddleware);
 app.use('/api', sameOrigin);
+app.use('/api', apiRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
