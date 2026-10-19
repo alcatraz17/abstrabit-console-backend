@@ -60,8 +60,8 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 - [x] AI summary, tags and severity suggestion through Groq with a 5-second timeout
 - [x] Mirror adapters for Discord channel webhooks and Slack incoming webhooks
-- [ ] Job table with leases, claiming through `FOR UPDATE SKIP LOCKED` and lease-token fencing
-- [ ] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
+- [x] Job table with leases, claiming through `FOR UPDATE SKIP LOCKED` and lease-token fencing
+- [x] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
 - [ ] Inline runner and handlers for reply, channel card, mirror, AI enrichment, card updates and failure notices
 - [ ] Reconciliation of channel cards and Discord mirrors after an unknown outcome
 - [ ] Cron sweep endpoint with housekeeping, and the Cloudflare Worker that calls it every minute
@@ -76,7 +76,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 7. Tests
 
-- [ ] Unit tests for utilities, environment, rule engine, permissions, webhooks, retry policy and HTTP helpers
+- [x] Unit tests for utilities, environment, rule engine, permissions, webhooks, retry policy and HTTP helpers
 - [x] Integration tests for authentication
 - [ ] Integration tests for the interactions endpoint, the report pipeline and the connect flow
 - [ ] Integration tests for retries, leases, reconciliation, deadlines, scrubbing and the cron endpoint
