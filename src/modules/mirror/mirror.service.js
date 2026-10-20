@@ -15,7 +15,7 @@ function slackEscape(value) {
 
 function discordPayload(notification) {
   return {
-    username: 'Report Bot',
+    username: 'Abstrabit Console',
     allowed_mentions: NO_MENTIONS,
     embeds: [
       {
