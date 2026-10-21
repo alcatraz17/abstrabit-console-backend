@@ -87,7 +87,6 @@ export const ATTEMPT_OUTCOME = Object.freeze({
 
 export const EVENT_TYPE = Object.freeze({
   SIGNATURE_REJECTED: 'signature_rejected',
-  STALE_TIMESTAMP: 'stale_timestamp',
   DUPLICATE_INTERACTION: 'duplicate_interaction',
   LOGIN_FAILED: 'login_failed',
   LOGIN_SUCCEEDED: 'login_succeeded',
@@ -103,7 +102,6 @@ export const EVENT_TYPE = Object.freeze({
 
 export const SECURITY_EVENT_TYPES = Object.freeze([
   EVENT_TYPE.SIGNATURE_REJECTED,
-  EVENT_TYPE.STALE_TIMESTAMP,
   EVENT_TYPE.DUPLICATE_INTERACTION,
   EVENT_TYPE.LOGIN_FAILED,
   EVENT_TYPE.CRON_UNAUTHORIZED,
@@ -125,7 +123,6 @@ export const LIMITS = Object.freeze({
 });
 
 export const TIMING = Object.freeze({
-  signatureToleranceSeconds: 300,
   recordBudgetMs: 1500,
   inlineBudgetMs: 15_000,
   outboundTimeoutMs: 5000,

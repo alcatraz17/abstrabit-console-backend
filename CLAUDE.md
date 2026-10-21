@@ -17,7 +17,7 @@ Deployed as its own Vercel project. The HTTP API under /api is the contract with
 ## Invariants
 
 - /api/discord/interactions is mounted before express.json() and uses express.raw(); verifyKey is awaited.
-- Timestamps are accepted within 300 s; interactions are deduplicated with INSERT … ON CONFLICT DO NOTHING.
+- Interactions are deduplicated on their id with INSERT … ON CONFLICT DO NOTHING.
 - The interaction route verifies, records and acknowledges; side effects run as jobs through background().
 - Jobs run after claimJobs() and complete through the lease_token check; inline work is 2 attempts within ~15 s.
 - process creates child jobs in the same transaction as the decision.

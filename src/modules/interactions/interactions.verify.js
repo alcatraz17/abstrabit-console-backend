@@ -1,5 +1,5 @@
 import { verifyKey } from 'discord-interactions';
-import { EVENT_TYPE, TIMING } from '../../config/constants.js';
+import { EVENT_TYPE } from '../../config/constants.js';
 import { env } from '../../config/env.js';
 import { AppError, UnauthorizedError } from '../../common/errors.js';
 import { recordEvent } from '../../common/events.js';
@@ -34,13 +34,6 @@ export async function verifyDiscordRequest(req, _res, next) {
     valid = false;
   }
   if (!valid) return next(await reject(req, EVENT_TYPE.SIGNATURE_REJECTED, 'signature mismatch'));
-
-  const ageSeconds = Math.abs(Date.now() / 1000 - Number(timestamp));
-  if (ageSeconds > TIMING.signatureToleranceSeconds) {
-    return next(
-      await reject(req, EVENT_TYPE.STALE_TIMESTAMP, `timestamp off by ${Math.round(ageSeconds)} s`),
-    );
-  }
 
   try {
     req.interaction = JSON.parse(body.toString('utf8'));

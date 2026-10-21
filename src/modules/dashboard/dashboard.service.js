@@ -54,7 +54,7 @@ export async function overview(guildId) {
   const [securityStats] = await db
     .select({
       rejectedRequests24h:
-        sql`count(*) filter (where ${events.type} in (${EVENT_TYPE.SIGNATURE_REJECTED}, ${EVENT_TYPE.STALE_TIMESTAMP}) and ${events.ts} >= ${since})`.mapWith(
+        sql`count(*) filter (where ${events.type} = ${EVENT_TYPE.SIGNATURE_REJECTED} and ${events.ts} >= ${since})`.mapWith(
           Number,
         ),
       lastSweepAt: sql`max(${events.ts}) filter (where ${events.type} = ${EVENT_TYPE.SWEEP_RUN})`,

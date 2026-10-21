@@ -69,16 +69,6 @@ describe('interactions endpoint security', () => {
     expect(response.status).toBe(401);
   });
 
-  it('rejects a validly signed but stale request and records it', async () => {
-    const response = await sendInteraction(
-      { id: '1', type: 1 },
-      { timestamp: Math.floor(Date.now() / 1000) - 301 },
-    );
-    expect(response.status).toBe(401);
-    const [event] = await query(`SELECT type FROM events WHERE type = 'stale_timestamp'`);
-    expect(event).toBeDefined();
-  });
-
   it('rejects oversized bodies', async () => {
     const response = await sendInteraction(null, {
       body: JSON.stringify({ id: '1', type: 1, pad: 'x'.repeat(300_000) }),

@@ -9,7 +9,7 @@ The API behind a Discord slash-command bot and its admin console. Discord delive
 ## Architecture
 
 ```
-Discord ──POST /api/discord/interactions──▶ verify Ed25519 + timestamp
+Discord ──POST /api/discord/interactions──▶ verify Ed25519
                                               │ record interaction (dedup by id)
                                               │ create `process` job
                                               ▼
@@ -103,7 +103,7 @@ Recovery from a bad deploy is Vercel's Instant Rollback; migrations are additive
 | Requirement              | Implementation                                                                                                                                                                                                                    |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Forged requests rejected | Ed25519 verification of the raw body before any parsing; missing, malformed or invalid signatures get 401 and a `signature_rejected` event                                                                                        |
-| Replays rejected         | Timestamps older than 300 s get 401 (`stale_timestamp`); interaction ids are unique, so a replay inside the window is recorded once and acknowledged without side effects (`duplicate_interaction`)                               |
+| Replays handled once     | The interaction id is the primary key, so a replayed request is recorded once, acknowledged without side effects and logged as a `duplicate_interaction` event                                                                    |
 | 3-second window          | The endpoint only verifies, records (1.5 s budget) and acknowledges; `ack_ms` is stored per interaction and shown as average and p95                                                                                              |
 | No duplicate actions     | Jobs are unique per interaction and kind, claimed with `FOR UPDATE SKIP LOCKED` and completed only with a matching `lease_token`; button transitions are conditional updates                                                      |
 | No silently lost work    | Every side effect is a row in `jobs`; failures retry with backoff up to 8 attempts, then become `dead`, appear on the Failures page and can be retried                                                                            |

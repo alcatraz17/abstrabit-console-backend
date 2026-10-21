@@ -16,7 +16,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ## Request flow
 
-1. Discord sends each interaction to `POST /api/discord/interactions`. The raw body is verified with Ed25519 and the timestamp must be within 300 seconds.
+1. Discord sends each interaction to `POST /api/discord/interactions`. The raw body is verified with Ed25519.
 2. `PING` is answered with `PONG`. Every other interaction is recorded once, keyed on its id, together with a `process` job, inside a 1.5 second budget.
 3. The initial response goes out within Discord's 3-second window: deferred for `/report`, a modal when `/report` has no text, inline for `/status` and `/connect`, and a deferred update for buttons.
 4. `process` evaluates the rules, asks the AI for a summary and creates the child jobs (`discord_reply`, `channel_post`, `mirror`, `ai_enrich`) in one transaction.
@@ -49,7 +49,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 4. Interactions endpoint
 
-- [x] Ed25519 verification on the raw body, the timestamp window and `PING`
+- [x] Ed25519 verification on the raw body and `PING`
 - [x] `junk-requests.sh` for checking forged and malformed requests against a deployment
 - [x] Recording with dedup on the interaction id and a stored configuration snapshot
 - [x] Initial responses: deferred, modal, inline and deferred update
