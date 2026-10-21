@@ -15,12 +15,12 @@ import { logger } from '../../utils/logger.js';
 import { discord } from '../discord/discord.client.js';
 import {
   EPHEMERAL_FLAG,
-  REPORT_MODAL_PREFIX,
+  REPORT_FORM_PREFIX,
   REPORT_TEXT_INPUT,
   RESPONSE,
   ephemeralReply,
   message,
-  reportModal,
+  reportForm,
 } from '../discord/discord.payloads.js';
 import { hasPermission } from '../discord/discord.permissions.js';
 import { runInteraction } from '../jobs/jobs.runner.js';
@@ -37,7 +37,7 @@ import {
   updateAckTime,
 } from './interactions.service.js';
 
-const INTERACTION_TYPE = { PING: 1, COMMAND: 2, COMPONENT: 3, MODAL: 5 };
+const INTERACTION_TYPE = { PING: 1, COMMAND: 2, BUTTON: 3, REPORT_FORM: 5 };
 const BUTTON_PATTERN = /^r:(ack|escalate|resolve):(\d{1,10})$/;
 
 const NOT_CONNECTED =
@@ -205,7 +205,7 @@ async function handleReport(req, res, { config, version }, { text, severity, kin
       { withProcessJob: false },
     );
     if (recorded.duplicate) await recordDuplicate(interaction);
-    return res.json(reportModal(severity));
+    return res.json(reportForm(severity));
   }
   return acknowledge(req, res, {
     record: buildRecord(interaction, {
@@ -239,10 +239,10 @@ async function handleCommand(req, res) {
   });
 }
 
-async function handleModal(req, res) {
+async function handleReportForm(req, res) {
   const interaction = req.interaction;
   const customId = interaction.data?.custom_id ?? '';
-  if (!customId.startsWith(`${REPORT_MODAL_PREFIX}:`)) {
+  if (!customId.startsWith(`${REPORT_FORM_PREFIX}:`)) {
     return res.json(ephemeralReply('This form is no longer supported.'));
   }
   const context = await loadGuildContext(interaction.guild_id, COMMANDS.REPORT);
@@ -254,7 +254,7 @@ async function handleModal(req, res) {
   });
 }
 
-async function handleComponent(req, res) {
+async function handleButton(req, res) {
   const interaction = req.interaction;
   const match = BUTTON_PATTERN.exec(interaction.data?.custom_id ?? '');
   if (!match) return res.json(ephemeralReply('This button is no longer supported.'));
@@ -288,10 +288,10 @@ export async function handleInteraction(req, res) {
       return res.json({ type: RESPONSE.PONG });
     case INTERACTION_TYPE.COMMAND:
       return handleCommand(req, res);
-    case INTERACTION_TYPE.COMPONENT:
-      return handleComponent(req, res);
-    case INTERACTION_TYPE.MODAL:
-      return handleModal(req, res);
+    case INTERACTION_TYPE.BUTTON:
+      return handleButton(req, res);
+    case INTERACTION_TYPE.REPORT_FORM:
+      return handleReportForm(req, res);
     default:
       throw new AppError(400, 'unsupported_interaction', 'This interaction type is not supported.');
   }

@@ -11,7 +11,7 @@ export const RESPONSE = Object.freeze({
 
 export const EPHEMERAL_FLAG = 64;
 export const NO_MENTIONS = Object.freeze({ parse: [] });
-export const REPORT_MODAL_PREFIX = 'report_modal';
+export const REPORT_FORM_PREFIX = 'report_modal';
 export const REPORT_TEXT_INPUT = 'report_text';
 
 const LIMIT = Object.freeze({ content: 2000, description: 4096, field: 1024, title: 256 });
@@ -114,11 +114,11 @@ export function reportCard(report) {
   });
 }
 
-export function reportModal(severity) {
+export function reportForm(severity) {
   return {
     type: RESPONSE.MODAL,
     data: {
-      custom_id: `${REPORT_MODAL_PREFIX}:${severity ?? 'none'}`,
+      custom_id: `${REPORT_FORM_PREFIX}:${severity ?? 'none'}`,
       title: 'Report a problem',
       components: [
         {
