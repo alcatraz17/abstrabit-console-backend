@@ -2,7 +2,7 @@ import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import app from '../../src/app.js';
 import { drainBackground } from '../../src/utils/background.js';
-import { commandInteraction, sendInteraction } from '../helpers/discord.js';
+import { buttonInteraction, commandInteraction, sendInteraction } from '../helpers/discord.js';
 import { GUILD_ID, createAdmin, createGuild, query, resetDatabase } from '../helpers/database.js';
 import { installFakeFetch, json } from '../helpers/fake-fetch.js';
 
@@ -210,6 +210,23 @@ describe('admin API', () => {
       .get(`/api/admin/guilds/${GUILD_ID}/interactions`)
       .query({ limit: 1, before: page.body.items[0].receivedAt });
     expect(older.body.items[0].id).toBe(first.id);
+  });
+
+  it('shows the report state on feed rows and refreshes it after a button click', async () => {
+    const payload = await report('Invoices page shows the wrong totals');
+    const initial = await agent.get(`/api/admin/guilds/${GUILD_ID}/interactions`);
+    const row = initial.body.items.find((item) => item.id === payload.id);
+    expect(row).toMatchObject({ status: 'done', reportStatus: 'open' });
+
+    await sendInteraction(buttonInteraction({ customId: `r:ack:${row.reportId}` }));
+    await drainBackground();
+
+    const changes = await agent
+      .get(`/api/admin/guilds/${GUILD_ID}/interactions`)
+      .query({ since: initial.body.cursor });
+    expect(changes.body.items.find((item) => item.id === payload.id)).toMatchObject({
+      reportStatus: 'acknowledged',
+    });
   });
 
   it('returns interaction details with a timeline and without secrets', async () => {

@@ -83,7 +83,7 @@ function inputPreview(row) {
   return truncate(row.input?.text ?? '', 160);
 }
 
-function toFeedItem(row, actions) {
+function toFeedItem(row, actions, reportStatus = null) {
   const decision = row.decision;
   return {
     id: row.id,
@@ -96,6 +96,7 @@ function toFeedItem(row, actions) {
     tags: [...new Set([...(decision?.tags ?? []), ...(row.ai?.tags ?? [])])],
     blockReason: decision && !decision.allowed ? decision.reason : null,
     reportId: row.reportId,
+    reportStatus,
     ackMs: row.ackMs,
     configVersion: row.configVersion,
     aiSummary: row.ai?.summary ?? null,
@@ -129,6 +130,15 @@ async function actionsFor(interactionIds) {
   return grouped;
 }
 
+async function reportStatusesFor(reportIds) {
+  if (reportIds.length === 0) return new Map();
+  const rows = await db
+    .select({ id: reports.id, status: reports.status })
+    .from(reports)
+    .where(inArray(reports.id, reportIds));
+  return new Map(rows.map((row) => [row.id, row.status]));
+}
+
 export async function feed(guildId, { since, before, command, status, limit }) {
   const [{ now }] = (await db.execute(sql`select now() as now`)).rows;
   const filters = [eq(interactions.guildId, guildId)];
@@ -144,9 +154,15 @@ export async function feed(guildId, { since, before, command, status, limit }) {
     .orderBy(desc(interactions.receivedAt), desc(interactions.id))
     .limit(since ? 500 : limit + 1);
   const page = since ? rows : rows.slice(0, limit);
-  const actions = await actionsFor(page.map((row) => row.id));
+  const reportIds = [...new Set(page.map((row) => row.reportId).filter(Boolean))];
+  const [actions, reportStatuses] = await Promise.all([
+    actionsFor(page.map((row) => row.id)),
+    reportStatusesFor(reportIds),
+  ]);
   return {
-    items: page.map((row) => toFeedItem(row, actions.get(row.id) ?? [])),
+    items: page.map((row) =>
+      toFeedItem(row, actions.get(row.id) ?? [], reportStatuses.get(row.reportId) ?? null),
+    ),
     cursor: new Date(now).toISOString(),
     hasMore: !since && rows.length > limit,
   };
@@ -224,7 +240,7 @@ export async function interactionDetail(adminId, interactionId) {
 
   const report = reportRows[0] ?? null;
   return {
-    ...toFeedItem(interaction, actions),
+    ...toFeedItem(interaction, actions, report?.status ?? null),
     channelId: interaction.channelId,
     input: interaction.input,
     decision: interaction.decision,

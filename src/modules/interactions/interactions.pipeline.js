@@ -155,7 +155,13 @@ async function processButton(job, { interaction, guild }, startedAt) {
           inArray(reports.status, transition.from),
         ),
       )
-      .returning({ id: reports.id, status: reports.status });
+      .returning({ id: reports.id, status: reports.status, interactionId: reports.interactionId });
+    if (updated) {
+      await tx
+        .update(interactions)
+        .set({ updatedAt: new Date() })
+        .where(eq(interactions.id, updated.interactionId));
+    }
 
     const decision = updated
       ? { allowed: true, transition: { action, from: before.status, to: updated.status } }
