@@ -6,6 +6,8 @@ import { truncate } from '../../utils/text.js';
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const ROUTE = 'POST /openai/v1/chat/completions';
+const MAX_COMPLETION_TOKENS = 1024;
+const LOW_EFFORT_MODEL_PREFIXES = ['openai/gpt-oss'];
 
 const SYSTEM_PROMPT = [
   'You triage support reports for an operations team.',
@@ -40,6 +42,21 @@ export function normalizeAiResult(raw) {
   };
 }
 
+export function buildGroqRequest(text, model) {
+  const lowEffort = LOW_EFFORT_MODEL_PREFIXES.some((prefix) => model.startsWith(prefix));
+  return {
+    model,
+    temperature: 0,
+    max_completion_tokens: MAX_COMPLETION_TOKENS,
+    ...(lowEffort ? { reasoning_effort: 'low' } : {}),
+    response_format: { type: 'json_object' },
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: truncate(text, LIMITS.reportText) },
+    ],
+  };
+}
+
 export async function summarizeReport(text, { simulateSlow = false } = {}) {
   if (!isAiConfigured()) return null;
   if (simulateSlow) {
@@ -54,16 +71,7 @@ export async function summarizeReport(text, { simulateSlow = false } = {}) {
     method: 'POST',
     timeoutMs: TIMING.aiTimeoutMs,
     headers: { Authorization: `Bearer ${env.GROQ_API_KEY}` },
-    body: {
-      model: env.GROQ_MODEL,
-      temperature: 0,
-      max_tokens: 200,
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: truncate(text, LIMITS.reportText) },
-      ],
-    },
+    body: buildGroqRequest(text, env.GROQ_MODEL),
   });
   let content;
   try {

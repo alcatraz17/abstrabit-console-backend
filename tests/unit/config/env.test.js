@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { loadEnv } from '../../../src/config/env.js';
-import { normalizeAiResult } from '../../../src/modules/ai/ai.service.js';
+import { buildGroqRequest, normalizeAiResult } from '../../../src/modules/ai/ai.service.js';
 
 const valid = {
   APP_URL: 'https://console.example.com',
@@ -21,6 +21,7 @@ describe('environment loading', () => {
       GROQ_API_KEY: '',
     });
     expect(env.PORT).toBe(3000);
+    expect(env.GROQ_MODEL).toBe('openai/gpt-oss-20b');
     expect(env.SESSION_SECRET).toHaveLength(2);
     expect(env.GROQ_API_KEY).toBeUndefined();
   });
@@ -47,6 +48,18 @@ describe('AI result normalisation', () => {
       tags: ['outage', 'billing'],
       severitySuggestion: null,
     });
+  });
+
+  it('asks reasoning models for low effort and leaves room for the answer', () => {
+    const reasoning = buildGroqRequest('Checkout is down', 'openai/gpt-oss-20b');
+    expect(reasoning).toMatchObject({
+      reasoning_effort: 'low',
+      max_completion_tokens: 1024,
+      response_format: { type: 'json_object' },
+    });
+    expect(buildGroqRequest('Checkout is down', 'llama-3.3-70b-versatile')).not.toHaveProperty(
+      'reasoning_effort',
+    );
   });
 
   it('rejects malformed model output', () => {

@@ -35,7 +35,7 @@ const envSchema = z.object({
   DISCORD_BOT_TOKEN: secret(20),
   CRON_SECRET: secret(32),
   GROQ_API_KEY: optionalString,
-  GROQ_MODEL: z.string().min(1).default('llama-3.1-8b-instant'),
+  GROQ_MODEL: z.string().min(1).default('openai/gpt-oss-20b'),
 });
 
 export function loadEnv(source = process.env) {

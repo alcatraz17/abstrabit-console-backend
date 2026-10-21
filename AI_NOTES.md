@@ -4,7 +4,7 @@
 
 - **Claude Code** (Claude Opus) in the editor and terminal, guided by `CLAUDE.md` in each repository.
 - I wrote the requirements breakdown, chose the architecture and reliability model, reviewed every change and decided what to keep. Claude drafted the implementation plan, module code, tests and documentation against that plan, and ran lint and tests after each step.
-- The AI step inside the product uses Groq (`llama-3.1-8b-instant`) in JSON mode for a one-line summary, tags from a fixed list and a severity suggestion. Its output is validated and capped, and the report is never blocked on it.
+- The AI step inside the product uses Groq (`openai/gpt-oss-20b`, low reasoning effort) in JSON mode for a one-line summary, tags from a fixed list and a severity suggestion. Its output is validated and capped, and the report is never blocked on it.
 
 ## Key decisions
 

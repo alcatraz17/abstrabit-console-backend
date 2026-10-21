@@ -61,6 +61,22 @@ async function readBody(response) {
   }
 }
 
+function providerDetails(payload) {
+  const nested = payload?.error && typeof payload.error === 'object' ? payload.error : null;
+  const numericCode = typeof payload?.code === 'number' ? payload.code : null;
+  const textCode = typeof nested?.code === 'string' ? nested.code : null;
+  const message =
+    typeof payload?.message === 'string'
+      ? payload.message
+      : typeof nested?.message === 'string'
+        ? nested.message
+        : typeof payload?.error === 'string'
+          ? payload.error
+          : '';
+  const detail = [textCode, message].filter(Boolean).join(': ').slice(0, 200);
+  return { providerCode: numericCode, detail };
+}
+
 function retryAfterFrom(response, body) {
   const fromBody = Number(body?.retry_after);
   if (Number.isFinite(fromBody) && fromBody > 0) return Math.ceil(fromBody);
@@ -84,7 +100,7 @@ export async function requestJson(url, { route, method = 'GET', headers = {}, bo
   const payload = await readBody(response);
   if (response.ok) return payload;
 
-  const providerCode = typeof payload?.code === 'number' ? payload.code : null;
+  const { providerCode, detail } = providerDetails(payload);
   if (response.status === 429) {
     throw new DeliveryError({
       route,
@@ -92,6 +108,7 @@ export async function requestJson(url, { route, method = 'GET', headers = {}, bo
       httpStatus: 429,
       providerCode,
       retryAfterSeconds: retryAfterFrom(response, payload),
+      detail,
     });
   }
   if (response.status >= 500 || response.status === 408) {
@@ -108,6 +125,6 @@ export async function requestJson(url, { route, method = 'GET', headers = {}, bo
     httpStatus: response.status,
     providerCode,
     permanent: true,
-    detail: typeof payload?.message === 'string' ? payload.message.slice(0, 200) : '',
+    detail,
   });
 }

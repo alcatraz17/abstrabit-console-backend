@@ -48,6 +48,21 @@ describe('outbound request classification', () => {
     expect(error.message.startsWith('POST /x returned')).toBe(true);
   });
 
+  it('includes the provider error code and message for OpenAI-style errors', async () => {
+    stubFetch(
+      async () =>
+        new Response(
+          '{"error":{"message":"The model `retired-model` does not exist","type":"invalid_request_error","code":"model_not_found"}}',
+          { status: 404 },
+        ),
+    );
+    const error = await failure(call());
+    expect(error).toMatchObject({ outcome: 'rejected', permanent: true, providerCode: null });
+    expect(error.message).toBe(
+      'POST /x returned 404: model_not_found: The model `retired-model` does not exist',
+    );
+  });
+
   it('distinguishes requests that never left from ambiguous network failures', async () => {
     stubFetch(async () => {
       throw new TypeError('fetch failed', { cause: { code: 'ECONNREFUSED' } });

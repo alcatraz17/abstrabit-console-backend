@@ -84,7 +84,7 @@ npm run dev
 | `DISCORD_BOT_TOKEN`      | yes      | Channel posts, lookups and command registration                                    |
 | `CRON_SECRET`            | yes      | Bearer token for `/api/cron/sweep` (32+ characters)                                |
 | `GROQ_API_KEY`           |          | Enables AI summaries and tags                                                      |
-| `GROQ_MODEL`             |          | Groq model (`llama-3.1-8b-instant`)                                                |
+| `GROQ_MODEL`             |          | Groq model (`openai/gpt-oss-20b`)                                                  |
 
 Generate secrets with `openssl rand -base64 32`. Percent-encode special characters in the database password. With `DATABASE_CA_CERT` set, leave `sslmode` out of the connection strings, because a URL parameter overrides the certificate settings.
 
