@@ -58,13 +58,14 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 5. Delivery pipeline
 
-- [x] AI summary, tags and severity suggestion through Groq with a 5-second timeout
+- [x] AI summary, tags and severity suggestion through Groq (`openai/gpt-oss-20b`, low reasoning effort) with a 5-second timeout
 - [x] Mirror adapters for Discord channel webhooks and Slack incoming webhooks
 - [x] Job table with leases, claiming through `FOR UPDATE SKIP LOCKED` and lease-token fencing
 - [x] Retry policy with backoff, `Retry-After` support and interaction-token deadlines
 - [x] Inline runner and handlers for reply, channel card, mirror, AI enrichment, card updates and failure notices
 - [x] Reconciliation of channel cards and Discord mirrors after an unknown outcome
 - [x] Cron sweep endpoint with housekeeping, and the Cloudflare Worker that calls it every minute
+- [x] Provider error codes and messages kept in stored errors, so failures such as a retired AI model are explained in the console
 
 ### 6. Admin API
 
@@ -72,6 +73,7 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 - [x] Bot invite details and one-time connect codes
 - [x] Command configuration with versioned saves and a rule tester for unsaved drafts
 - [x] Overview figures, live feed with a change cursor, interaction timeline and security events
+- [x] Report state on live feed rows, refreshed when a button click changes the report
 - [x] Retrying and failed jobs with single and bulk retry
 
 ### 7. Tests
@@ -90,9 +92,15 @@ The backend for the Discord slash-command bot. It serves the Discord interaction
 
 ### 9. Deployment
 
-- [ ] Supabase project with migrations applied and the reviewer admin seeded
-- [ ] Vercel project with the production environment variables
-- [ ] Cloudflare Worker deployed with `CRON_SECRET`
-- [ ] Interactions Endpoint URL saved in the Discord Developer Portal and commands registered
-- [ ] `junk-requests.sh` run against production
+- [x] Supabase project with migrations applied and an admin account seeded
+- [x] Vercel project with the production environment variables
+- [x] Cloudflare Worker deployed with `CRON_SECRET`
+- [x] Interactions Endpoint URL saved in the Discord Developer Portal and commands registered
+- [x] `junk-requests.sh` run against production: all six forged requests rejected with 401
 - [ ] Reviewer kit: test server invite and throwaway admin account
+
+### 10. Follow-ups
+
+- [ ] Restore the per-minute sweep in production; the last recorded sweep ran at 09:41 UTC on 21 October
+- [ ] Record `ack_ms` for interactions acknowledged after the 1.5-second recording budget
+- [ ] Time the report form's acknowledgement only on its first delivery, so a duplicate cannot overwrite it
