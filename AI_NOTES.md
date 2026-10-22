@@ -3,7 +3,7 @@
 ## Tools and split of work
 
 - **Claude Code** in the editor and terminal, guided by a `CLAUDE.md` in each repository: Claude Opus 5.5 for planning, complex changes and audits, and Sonnet 5.5 for simple changes such as renames.
-- **claude.ai** with Claude Sonnet 5.5, mostly by voice, to clarify concepts and talk through trade-offs before committing to a design.
+- **claude.ai**: Sonnet 5.5 for quick clarifications over chat, and Sonnet 5 by voice to talk through concepts and trade-offs before committing to a design.
 
 - I chose the architecture and reliability model, set the constraints, reviewed every change and decided what to keep. Claude restated the brief as a simplified requirements document, then drafted the implementation plan, module code, tests and documentation against that plan, and ran lint and tests after each step.
 - The AI step inside the product uses Groq (`openai/gpt-oss-20b`, low reasoning effort) in JSON mode for a one-line summary, tags from a fixed list and a severity suggestion. Its output is validated and capped, and the report is never blocked on it.
