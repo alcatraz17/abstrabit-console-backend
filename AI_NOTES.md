@@ -2,7 +2,9 @@
 
 ## Tools and split of work
 
-- **Claude Code** (Claude Opus) in the editor and terminal, guided by `CLAUDE.md` in each repository.
+- **Claude Code** in the editor and terminal, guided by a `CLAUDE.md` in each repository: Claude Opus 5.5 for planning, complex changes and audits, and Sonnet 5.5 for simple changes such as renames.
+- **claude.ai** with Claude Sonnet 5.5, mostly by voice, to clarify concepts and talk through trade-offs before committing to a design.
+
 - I chose the architecture and reliability model, set the constraints, reviewed every change and decided what to keep. Claude restated the brief as a simplified requirements document, then drafted the implementation plan, module code, tests and documentation against that plan, and ran lint and tests after each step.
 - The AI step inside the product uses Groq (`openai/gpt-oss-20b`, low reasoning effort) in JSON mode for a one-line summary, tags from a fixed list and a severity suggestion. Its output is validated and capped, and the report is never blocked on it.
 
@@ -30,7 +32,7 @@ I worked in short, gated steps. Standing rules lived in Claude Code's project me
 
 > "I already told not to use typescript. Only nodejs, then why are you using typescript? … I just wanted you to copy folder structure and nothing else. Now remove both the folders frontend and backend and start everything from scratch."
 
-Both projects were rebuilt in JavaScript, and the rule went into memory so it could not recur. An early version also shared configuration files between frontend and backend; I had those separated so each project stands on its own.
+Both projects were rebuilt in JavaScript, and the rule went into memory so it could not recur. An early version also shared configuration files between frontend and backend. I had those separated so each project stands on its own.
 
 A second wrong turn surfaced at the first push. The tests used realistic-looking fake Slack webhook URLs, and GitHub push protection rejected both repositories as containing secrets. Claude first scanned the full history to confirm nothing real had leaked, then offered two fixes: allow the fixture on GitHub, or rewrite it. I chose the rewrite, so the three local commits that introduced it were rewritten with an obviously fake fixture, keeping messages, authors and dates, and verified with lint, formatting and both test suites before pushing.
 
